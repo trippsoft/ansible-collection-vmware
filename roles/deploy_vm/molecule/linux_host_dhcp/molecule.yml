@@ -18,6 +18,7 @@ provisioner:
           - key: ${VMWARE_CUSTOM_VALUE_KEY}
             value: ${VMWARE_CUSTOM_VALUE_VALUE}
         vmware_name: ${VMWARE_NAME}
+        vmware_datacenter: ${VMWARE_DATACENTER}
         vmware_host: ${VMWARE_HOST}
         vmware_datastore: ${VMWARE_DATASTORE}
         vmware_vm_hostname: "{{ vmware_name | lower }}"
