@@ -275,6 +275,8 @@
     success_msg: "CPU count '{{ vmware_cpus }}' is a valid number."
 
 - name: Validate memory size
+  when:
+    - vmware_ram_in_gb is defined
   ansible.builtin.assert:
     that:
       - vmware_ram_in_gb | int > 0
