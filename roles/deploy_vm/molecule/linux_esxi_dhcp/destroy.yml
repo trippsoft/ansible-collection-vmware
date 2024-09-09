@@ -12,7 +12,6 @@
         username: "{{ vmware_username }}"
         password: "{{ vmware_password }}"
         validate_certs: "{{ vmware_validate_certs | default(true) }}"
-        cluster: "{{ vmware_cluster }}"
         datacenter: ha-datacenter
         folder: /ha-datacenter/vm
         name: "{{ vmware_name }}"
@@ -25,7 +24,6 @@
         username: "{{ vmware_username }}"
         password: "{{ vmware_password }}"
         validate_certs: "{{ vmware_validate_certs | default(true) }}"
-        cluster: "{{ vmware_cluster }}"
         datacenter: ha-datacenter
         folder: /ha-datacenter/vm
         name: "{{ vmware_name }}"
