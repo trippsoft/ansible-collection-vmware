@@ -11,6 +11,7 @@ provisioner:
         vmware_hostname: ${VMWARE_HOSTNAME}
         vmware_username: ${VMWARE_USERNAME}
         vmware_password: ${VMWARE_PASSWORD}
+        vmware_validate_certs: false
         vmware_infrastructure_type: esxi
         vmware_os_type: linux
         vmware_template: ${VMWARE_TEMPLATE}

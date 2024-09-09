@@ -11,7 +11,7 @@
         hostname: "{{ vmware_hostname }}"
         username: "{{ vmware_username }}"
         password: "{{ vmware_password }}"
-        validate_certs: "{{ vmware_validate_certs | default(true) }}"
+        validate_certs: false
         datacenter: ha-datacenter
         folder: /ha-datacenter/vm
         name: "{{ vmware_name }}"
@@ -23,7 +23,7 @@
         hostname: "{{ vmware_hostname }}"
         username: "{{ vmware_username }}"
         password: "{{ vmware_password }}"
-        validate_certs: "{{ vmware_validate_certs | default(true) }}"
+        validate_certs: false
         datacenter: ha-datacenter
         folder: /ha-datacenter/vm
         name: "{{ vmware_name }}"
