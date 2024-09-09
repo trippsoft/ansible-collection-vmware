@@ -267,12 +267,12 @@
 - name: Validate CPU count
   ansible.builtin.assert:
     that:
-      - vmware_cpu_count | int > 1
-      - vmware_cpu_count | int <= 768
-      - vmware_cpu_count | int == 1 or
-        vmware_cpu_count | int % 2 == 0
-    fail_msg: "CPU count '{{ vmware_cpu_count }}' is not a valid number.  It must be greater than 0, less than or equal to 768, and either 1 or a multiple of 2."
-    success_msg: "CPU count '{{ vmware_cpu_count }}' is a valid number."
+      - vmware_cpus | int > 1
+      - vmware_cpus | int <= 768
+      - vmware_cpus | int == 1 or
+        vmware_cpus | int % 2 == 0
+    fail_msg: "CPU count '{{ vmware_cpus }}' is not a valid number.  It must be greater than 0, less than or equal to 768, and either 1 or a multiple of 2."
+    success_msg: "CPU count '{{ vmware_cpus }}' is a valid number."
 
 - name: Validate memory size
   ansible.builtin.assert:
