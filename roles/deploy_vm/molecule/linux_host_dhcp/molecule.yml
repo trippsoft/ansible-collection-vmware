@@ -33,4 +33,5 @@ provisioner:
         vmware_secure_boot: true
         vmware_nested_virtualization: true
         vmware_network_name: ${VMWARE_NETWORK_NAME}
+        vmware_dv_switch_name: ${VMWARE_DVS_NAME}
         vmware_network_type: dhcp

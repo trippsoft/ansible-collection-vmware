@@ -62,6 +62,7 @@
         device_type: "{{ vmware_network_device_type }}"
         dns_servers: "{{ _vmware_network_dns_servers }}"
         domain: "{{ _vmware_network_domain }}"
+        dvswitch_name: "{{ vmware_dv_switch_name | default(omit) }}"
         gateway: "{{ _vmware_gateway }}"
         ip: "{{ _vmware_ip }}"
         name: "{{ vmware_network_name }}"
