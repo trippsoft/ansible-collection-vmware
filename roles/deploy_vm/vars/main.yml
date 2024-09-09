@@ -5,7 +5,7 @@ _vmware_datacenter_folder_prefix: >-
   {{ '/' + vmware_datacenter_folder | string if vmware_datacenter_folder is defined else '' }}
 
 _vmware_datacenter_prefix: >-
-  {{ _vmware_datacenter_folder_prefix | string + '/' + _vmware_datacenter | string + '/vm' }}
+  {{ _vmware_datacenter_folder_prefix | string + '/' + vmware_datacenter | string + '/vm' }}
 
 _vmware_folder: >-
   {{ _vmware_datacenter_prefix | string + '/' + vmware_folder | string
