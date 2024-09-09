@@ -1,0 +1,311 @@
+---
+- name: Check if VMware template exists
+  delegate_to: localhost
+  community.vmware.vmware_guest_info:
+    hostname: "{{ vmware_hostname }}"
+    username: "{{ vmware_username }}"
+    password: "{{ vmware_password }}"
+    validate_certs: "{{ vmware_validate_certs }}"
+    datacenter: "{{ _vmware_datacenter }}"
+    name: "{{ vmware_template }}"
+  register: _vmware_template_info
+  ignore_errors: true
+
+- name: Validate VMware template exists
+  ansible.builtin.assert:
+    that:
+      - not _vmware_template_info.failed
+    fail_msg: "VMware template '{{ vmware_template }}' does not exist."
+    success_msg: "VMware template '{{ vmware_template }}' exists."
+
+- name: Validate VMware datacenter
+  when:
+    - vmware_infrastructure_type == 'vcenter'
+  block:
+    - name: Validate VMware datacenter is defined
+      ansible.builtin.assert:
+        that:
+          - vmware_datacenter is defined
+        fail_msg: "The 'vmware_datacenter' variable is required when deploying to vCenter."
+        success_msg: "The 'vmware_datacenter' variable is defined."
+
+    - name: Check if VMware datacenter exists
+      delegate_to: localhost
+      community.vmware.vmware_datacenter_info:
+        hostname: "{{ vmware_hostname }}"
+        username: "{{ vmware_username }}"
+        password: "{{ vmware_password }}"
+        validate_certs: "{{ vmware_validate_certs }}"
+        datacenter: "{{ vmware_datacenter }}"
+      register: _vmware_datacenter_info
+      ignore_errors: true
+
+    - name: Validate VMware datacenter exists
+      ansible.builtin.assert:
+        that:
+          - not _vmware_datacenter_info.failed
+        fail_msg: "VMware datacenter '{{ vmware_datacenter }}' does not exist."
+        success_msg: "VMware datacenter '{{ vmware_datacenter }}' exists."
+
+- name: Validate VMware cluster or host is defined
+  ansible.builtin.assert:
+    that:
+      - vmware_cluster is defined or
+        vmware_host is defined
+    fail_msg: "Either the 'vmware_cluster' or 'vmware_host' variable must be defined."
+    success_msg: "Either the 'vmware_cluster' or 'vmware_host' variable is defined."
+
+- name: Validate VMware host
+  when:
+    - vmware_host is defined
+  block:
+    - name: Validate VMware cluster is not defined with VMware host
+      when:
+        - vmware_host is defined
+      ansible.builtin.assert:
+        that:
+          - vmware_cluster is not defined
+        fail_msg: "The 'vmware_cluster' variable cannot be defined with the 'vmware_host' variable."
+        success_msg: "The 'vmware_cluster' variable is not defined."
+
+    - name: Check if VMware host exists
+      delegate_to: localhost
+      community.vmware.vmware_host_facts:
+        hostname: "{{ vmware_hostname }}"
+        username: "{{ vmware_username }}"
+        password: "{{ vmware_password }}"
+        validate_certs: "{{ vmware_validate_certs }}"
+        esxi_hostname: "{{ vmware_host }}"
+      register: _vmware_host_info
+      ignore_errors: true
+
+    - name: Validate VMware host exists
+      ansible.builtin.assert:
+        that:
+          - not _vmware_host_info.failed
+        fail_msg: "VMware host '{{ vmware_host }}' does not exist."
+        success_msg: "VMware host '{{ vmware_host }}' exists."
+
+- name: Validate VMware cluster
+  when:
+    - vmware_cluster is defined
+  block:
+    - name: Check if VMware cluster exists
+      delegate_to: localhost
+      community.vmware.vmware_cluster_info:
+        hostname: "{{ vmware_hostname }}"
+        username: "{{ vmware_username }}"
+        password: "{{ vmware_password }}"
+        validate_certs: "{{ vmware_validate_certs }}"
+        datacenter: "{{ _vmware_datacenter }}"
+        cluster_name: "{{ vmware_cluster }}"
+      register: _vmware_cluster_info
+      ignore_errors: true
+
+    - name: Validate VMware cluster exists
+      ansible.builtin.assert:
+        that:
+          - not _vmware_cluster_info.failed
+        fail_msg: "VMware cluster '{{ vmware_cluster }}' does not exist."
+        success_msg: "VMware cluster '{{ vmware_cluster }}' exists."
+
+- name: Check if VMware datastore exists
+  delegate_to: localhost
+  community.vmware.vmware_datastore_info:
+    hostname: "{{ vmware_hostname }}"
+    username: "{{ vmware_username }}"
+    password: "{{ vmware_password }}"
+    validate_certs: "{{ vmware_validate_certs }}"
+    datacenter: "{{ _vmware_datacenter }}"
+    name: "{{ vmware_datastore }}"
+  register: _vmware_datastore_info
+  ignore_errors: true
+
+- name: Validate VMware datastore exists
+  ansible.builtin.assert:
+    that:
+      - not _vmware_datastore_info.failed
+    fail_msg: "VMware datastore '{{ vmware_datastore }}' does not exist."
+    success_msg: "VMware datastore '{{ vmware_datastore }}' exists."
+
+- name: Validate hostname is valid
+  ansible.builtin.assert:
+    that:
+      - vmware_name is community.general.fqdn_valid
+      - vmware_name is not match('\.')
+    fail_msg: "Hostname '{{ vmware_name }}' is not a valid hostname."
+    success_msg: "Hostname '{{ vmware_name }}' is a valid hostname."
+
+- name: Validate hostname length
+  when:
+    - not vmware_allow_long_hostnames
+  ansible.builtin.assert:
+    that:
+      - vmware_name | length <= 15
+    fail_msg: "Hostname '{{ vmware_name }}' is too long. Hostnames must be 15 characters or less for legacy NetBIOS compatibility. Set 'vmware_allow_long_hostnames' to true to allow longer hostnames."
+    success_msg: "Hostname '{{ vmware_name }}' is 15 characters or less."
+
+- name: Validate DNS servers are defined as 1 or 2 servers
+  when:
+    - vmware_network_type == 'static'
+  ansible.builtin.assert:
+    that:
+      - vmware_dns_servers | default([]) | length > 0
+    fail_msg: At least 1 DNS server must be defined when using a static network configuration.
+    success_msg: At least 1 DNS server is defined.
+
+- name: Validate DNS servers are not defined as more than 2 servers
+  when:
+    - vmware_network_type == 'static'
+  ansible.builtin.assert:
+    that:
+      - vmware_dns_servers | default([]) | length <= 2
+    fail_msg: At most 2 DNS servers can be defined.
+    success_msg: At most 2 DNS servers are defined.
+
+- name: Validate DNS servers are valid IPv4 addresses
+  loop: "{{ vmware_dns_servers | default([]) }}"
+  ansible.builtin.assert:
+    that:
+      - item is ansible.utils.ipv4_address
+    fail_msg: "DNS server '{{ item }}' is not a valid IPv4 address."
+    success_msg: "DNS server '{{ item }}' is a valid IPv4 address."
+
+- name: Validate DNS suffixes
+  loop: "{{ vmware_dns_suffixes | default([]) }}"
+  when:
+    - vmware_network_type == 'static'
+  ansible.builtin.assert:
+    that:
+      - item is community.general.fqdn_valid
+    fail_msg: "DNS suffix '{{ item }}' is not a valid FQDN."
+    success_msg: "DNS suffix '{{ item }}' is a valid FQDN."
+
+- name: Validate Domain
+  when:
+    - vmware_domain is defined
+  ansible.builtin.assert:
+    that:
+      - vmware_domain is community.general.fqdn_valid
+    fail_msg: "Domain '{{ vmware_domain }}' is not a valid FQDN."
+    success_msg: "Domain '{{ vmware_domain }}' is a valid FQDN."
+
+- name: Validate Product ID
+  when:
+    - vmware_os_type == 'windows'
+    - vmware_product_id is defined
+  ansible.builtin.assert:
+    that:
+      - vmware_product_id is match('^[A-Z0-9]{5}-[A-Z0-9]{5}-[A-Z0-9]{5}-[A-Z0-9]{5}-[A-Z0-9]{5}$')
+    fail_msg: "Product ID '{{ vmware_product_id }}' is not formatted like a Windows product ID."
+    success_msg: "Product ID '{{ vmware_product_id }}' is formatted like a Windows product ID."
+
+- name: Validate time zone (Windows)
+  when:
+    - vmware_os_type == 'windows'
+    - vmware_timezone is defined
+  ansible.builtin.assert:
+    that:
+      - vmware_timezone is match('^[0-9]{3}$')
+    fail_msg: "Time zone '{{ vmware_timezone }}' is not formatted like a Windows time zone index."
+    success_msg: "Time zone '{{ vmware_timezone }}' is formatted like a Windows time zone index."
+
+- name: Validate time zone (Linux)
+  when:
+    - vmware_os_type == 'linux'
+    - vmware_timezone is defined
+  ansible.builtin.assert:
+    that:
+      - vmware_timezone is match('^[a-zA-Z0-9_/]+$')
+    fail_msg: "Time zone '{{ vmware_timezone }}' is not formatted like a Linux time zone."
+    success_msg: "Time zone '{{ vmware_timezone }}' is formatted like a Linux time zone."
+
+- name: Validate autologon count
+  when:
+    - vmware_os_type == 'windows'
+  ansible.builtin.assert:
+    that:
+      - vmware_autologon_count | int >= 0
+    fail_msg: "Autologon count '{{ vmware_autologon_count }}' is not a valid number."
+    success_msg: "Autologon count '{{ vmware_autologon_count }}' is a valid number."
+
+- name: Validate administrator password is defined
+  when:
+    - vmware_os_type == 'windows'
+  ansible.builtin.assert:
+    that:
+      - vmware_administrator_password is defined
+    fail_msg: "The 'vmware_administrator_password' variable is required when deploying a Windows VM."
+    success_msg: "The 'vmware_administrator_password' variable is defined."
+
+- name: Validate domain join variables
+  when:
+    - vmware_os_type == 'windows'
+    - vmware_join_domain
+  block:
+    - name: Validate domain is defined
+      ansible.builtin.assert:
+        that:
+          - vmware_domain is defined
+        fail_msg: "The 'vmware_domain' variable is required when joining a domain."
+        success_msg: "The 'vmware_domain' variable is defined."
+
+    - name: Validate domain join username is defined
+      ansible.builtin.assert:
+        that:
+          - vmware_join_username is defined
+        fail_msg: "The 'vmware_join_username' variable is required when joining a domain."
+        success_msg: "The 'vmware_join_username' variable is defined."
+
+    - name: Validate domain join password is defined
+      ansible.builtin.assert:
+        that:
+          - vmware_join_password is defined
+        fail_msg: "The 'vmware_join_password' variable is required when joining a domain."
+        success_msg: "The 'vmware_join_password' variable is defined."
+
+- name: Validate CPU count
+  ansible.builtin.assert:
+    that:
+      - vmware_cpu_count | int > 1
+      - vmware_cpu_count | int <= 768
+      - vmware_cpu_count | int == 1 or
+        vmware_cpu_count | int % 2 == 0
+    fail_msg: "CPU count '{{ vmware_cpu_count }}' is not a valid number.  It must be greater than 0, less than or equal to 768, and either 1 or a multiple of 2."
+    success_msg: "CPU count '{{ vmware_cpu_count }}' is a valid number."
+
+- name: Validate memory size
+  ansible.builtin.assert:
+    that:
+      - vmware_ram_in_gb | int > 0
+      - vmware_ram_in_gb | int <= 24560
+      - vmware_ram_in_gb | int % 4 == 0
+    fail_msg: "Memory size '{{ vmware_ram_in_gb }}' is not a valid number.  It must be greater than 0, less than or equal to 24560, and a multiple of 4."
+    success_msg: "Memory size '{{ vmware_ram_in_gb }}' is a valid number."
+
+- name: Validate IP address
+  when:
+    - vmware_network_type == 'static'
+  ansible.builtin.assert:
+    that:
+      - vmware_ip_address is ansible.utils.ipv4_address
+    fail_msg: "IP address '{{ vmware_ip_address }}' is not a valid IPv4 address."
+    success_msg: "IP address '{{ vmware_ip_address }}' is a valid IPv4 address."
+
+- name: Validate subnet mask
+  when:
+    - vmware_network_type == 'static'
+  ansible.builtin.assert:
+    that:
+      - vmware_subnet_mask is ansible.utils.ipv4_netmask
+    fail_msg: "Subnet mask '{{ vmware_subnet_mask }}' is not a valid IPv4 subnet mask."
+    success_msg: "Subnet mask '{{ vmware_subnet_mask }}' is a valid IPv4 subnet mask."
+
+- name: Validate gateway
+  when:
+    - vmware_network_type == 'static'
+  ansible.builtin.assert:
+    that:
+      - vmware_gateway is ansible.utils.ipv4_address
+    fail_msg: "Gateway '{{ vmware_gateway }}' is not a valid IPv4 address."
+    success_msg: "Gateway '{{ vmware_gateway }}' is a valid IPv4 address."

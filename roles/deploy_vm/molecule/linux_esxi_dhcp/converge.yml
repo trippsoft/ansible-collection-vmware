@@ -1,0 +1,7 @@
+---
+- name: Converge
+  hosts:
+    - localhost
+  gather_facts: false
+  roles:
+    - role: trippsc2.vmware.deploy_vm

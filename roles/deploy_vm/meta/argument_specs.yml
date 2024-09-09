@@ -1,0 +1,320 @@
+---
+argument_specs:
+  main:
+    short_description: Deploy VMware VM
+    description:
+      - This role deploys and customizes a new VMware VM.
+    author: Jim Tarpley
+    options:
+      vmware_hostname:
+        type: str
+        required: true
+        description:
+          - The FQDN or IP address of the VMware infrastructure to which the VM will be deployed.
+      vmware_username:
+        type: str
+        required: true
+        description:
+          - The username for authenticating with the VMware infrastructure.
+      vmware_password:
+        type: str
+        required: true
+        no_log: true
+        description:
+          - The password for authenticating with the VMware infrastructure.
+      vmware_validate_certs:
+        type: bool
+        required: false
+        default: true
+        description:
+          - Whether to validate SSL certificates.
+      vmware_infrastructure_type:
+        type: str
+        required: true
+        choices:
+          - vcenter
+          - esxi
+        description:
+          - The type of VMware infrastructure to which to deploy the VM.
+      vmware_os_type:
+        type: str
+        required: true
+        choices:
+          - linux
+          - windows
+        description:
+          - The type of operating system installed on the VM to be deployed.
+          - This value is used to determine which customization options are available.
+      vmware_template:
+        type: str
+        required: true
+        description:
+          - The name of the template from which to deploy the VM.
+      vmware_custom_values:
+        type: list
+        required: false
+        elements: dict
+        description:
+          - A list of custom values to configure on the VM.
+        options:
+          key:
+            type: str
+            required: true
+            description:
+              - The key of the custom value to configure on the VM.
+          value:
+            type: str
+            required: true
+            description:
+              - The value of the custom value to configure on the VM.
+      vmware_name:
+        type: str
+        required: true
+        description:
+          - The name of the VM to be deployed.
+      vmware_datacenter:
+        type: str
+        required: false
+        description:
+          - The name of the datacenter in which to deploy the VM.
+          - If *vmware_infrastructure_type* is `vcenter`, this is required. Otherwise, it is ignored and `ha-datacenter` is used.
+      vmware_datacenter_folder:
+        type: str
+        required: false
+        description:
+          - The name of the folder in which the datacenter exists to deploy the VM.
+          - If *vmware_infrastructure_type* is `vcenter`, this is optional. Otherwise, it is ignored.
+      vmware_folder:
+        type: str
+        required: false
+        description:
+          - The name of the folder in which to deploy the VM.
+          - If not provided, the VM is deployed in the root folder of the datacenter.
+          - If *vmware_infrastructure_type* is `vcenter`, this is optional. Otherwise, it is ignored.
+      vmware_cluster:
+        type: str
+        required: false
+        description:
+          - The name of the cluster in which to deploy the VM.
+          - This is mutually exclusive with *vmware_host*.
+          - If the cluster does not have DRS enabled, the *vmware_host* option must be used instead.
+      vmware_host:
+        type: str
+        required: false
+        description:
+          - The name of the host on which to deploy the VM.
+          - This is mutually exclusive with *vmware_cluster*.
+          - If the host is part of a cluster with DRS enabled, the *vmware_cluster* option must be used instead.
+      vmware_datastore:
+        type: str
+        required: true
+        description:
+          - The name of the datastore on which to deploy the VM files.
+      vmware_vm_hostname:
+        type: str
+        required: false
+        description:
+          - The hostname to configure on the VM.
+          - If not provided and *vmware_os_type* is `linux`, the lowercase value of *vmware_name* is used.
+          - If not provided and *vmware_os_type* is `windows`, the uppercase value of *vmware_name* is used.
+      vmware_allow_long_hostnames:
+        type: bool
+        required: false
+        default: false
+        description:
+          - Whether to allow long hostnames on the VM.
+          - If this is set to `true`, the *vmware_vm_hostname* must be less than 16 characters.
+      vmware_dns_servers:
+        type: list
+        required: false
+        elements: str
+        description:
+          - A list of DNS servers to configure on the VM.
+      vmware_dns_suffixes:
+        type: list
+        required: false
+        elements: str
+        description:
+          - A list of DNS suffixes to configure on the VM.
+      vmware_domain:
+        type: str
+        required: false
+        description:
+          - The domain to which the VM belongs.
+          - If *vmware_os_type* is `windows` and *vmware_join_domain* is `true`, the VM will be joined to this domain and this is required.
+      vmware_full_name:
+        type: str
+        required: false
+        description:
+          - The full name of the user to configure on the Windows VM.
+          - If *vmware_os_type* is `linux`, this is ignored.
+      vmware_organization:
+        type: str
+        required: false
+        description:
+          - The organization to configure on the Windows VM.
+          - If *vmware_os_type* is `linux`, this is ignored.
+      vmware_product_id:
+        type: str
+        required: false
+        description:
+          - The product ID to configure on the Windows VM.
+          - If *vmware_os_type* is `linux`, this is ignored.
+      vmware_timezone:
+        type: str
+        required: false
+        description:
+          - The timezone to configure on the VM.
+          - If *vmware_os_type* is `linux`, this should be in tz format (e.g. `America/New_York`).
+          - If *vmware_os_type* is `windows`, this should be in Windows index format (e.g. **Eastern Standard Time** is `035`).
+          - 'Linux Reference: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones'
+          - 'Windows Reference: https://learn.microsoft.com/en-us/previous-versions/windows/embedded/ms912391(v=winembedded.11)'
+      vmware_autologon_count:
+        type: int
+        required: false
+        default: 1
+        description:
+          - The number of times to enable autologon on the Windows VM.
+          - If *vmware_os_type* is `linux`, this is ignored.
+      vmware_administrator_password:
+        type: str
+        required: false
+        no_log: true
+        description:
+          - The password for the administrator account on the Windows VM.
+          - If *vmware_os_type* is `windows`, this is required. Otherwise, it is ignored.
+      vmware_join_domain:
+        type: bool
+        required: false
+        default: false
+        description:
+          - Whether to join the Windows VM to a domain.
+          - If *vmware_os_type* is `linux`, this is ignored.
+      vmware_domain_username:
+        type: str
+        required: false
+        description:
+          - The username for authenticating with the domain.
+          - If *vmware_os_type* is `windows` and *vmware_join_domain* is `true`, this is required. Otherwise, it is ignored.
+      vmware_domain_password:
+        type: str
+        required: false
+        no_log: true
+        description:
+          - The password for authenticating with the domain.
+          - If *vmware_os_type* is `windows` and *vmware_join_domain* is `true`, this is required. Otherwise, it is ignored.
+      vmware_workgroup:
+        type: str
+        required: false
+        default: WORKGROUP
+        description:
+          - The workgroup to which the Windows VM belongs.
+          - If *vmware_os_type* is `linux` or *vmware_join_domain* is `true`, this is ignored.
+      vmware_run_once_commands:
+        type: list
+        required: false
+        default: []
+        elements: str
+        description:
+          - A list of commands to run on the Windows VM after deployment.
+          - If *vmware_os_type* is `linux`, this is ignored.
+      vmware_hw_clock_is_utc:
+        type: bool
+        required: false
+        description:
+          - Whether the hardware clock on the VM is set to UTC.
+          - If *vmware_os_type* is `windows`, this is ignored.
+      vmware_script_text:
+        type: str
+        required: false
+        description:
+          - The script text to configure on the Linux VM.
+          - If *vmware_os_type* is `windows`, this is ignored.
+      vmware_boot_firmware:
+        type: str
+        required: false
+        choices:
+          - bios
+          - efi
+        default: efi
+        description:
+          - The boot firmware to configure on the VM.
+          - If *vmware_secure_boot* is `true`, this must be set to `efi`.
+      vmware_secure_boot:
+        type: bool
+        required: false
+        default: true
+        description:
+          - Whether to enable Secure Boot on the VM.
+          - If this is set to `true`, *vmware_boot_firmware* must be set to `efi`.
+      vmware_nested_virtualization:
+        type: bool
+        required: false
+        description:
+          - Whether to enable nested virtualization on the VM.
+          - This may be required for running hypervisors within the VM or using certain security features like Windows Defender Application Guard.
+      vmware_virtualization_based_security:
+        type: bool
+        required: false
+        description:
+          - Whether to enable virtualization-based security on the Windows VM.
+          - This is required for using certain security features like Windows Defender Credential Guard.
+          - This will fail if the version of Windows does not support virtualization-based security.
+          - If *vmware_os_type* is `linux`, this is ignored.
+      vmware_cpus:
+        type: int
+        required: false
+        default: 2
+        description:
+          - The number of CPUs to configure on the VM.
+      vmware_ram_in_gb:
+        type: int
+        required: false
+        description:
+          - The amount of RAM in MB to configure on the VM.
+          - If *vmware_os_type* is `linux`, this defaults to `2`.
+          - If *vmware_os_type* is `windows`, this defaults to `4`.
+      vmware_network_name:
+        type: str
+        required: true
+        description:
+          - The name of the network to which the VM will be connected.
+      vmware_network_type:
+        type: str
+        required: false
+        default: dhcp
+        choices:
+          - dhcp
+          - static
+        description:
+          - The type of network configuration to use on the VM.
+          - If this is set to `static`, the *vmware_ip*, *vmware_netmask*, and *vmware_gateway* are required.
+      vmware_ip:
+        type: str
+        required: false
+        description:
+          - The IP address to configure on the VM.
+          - If *vmware_network_type* is `static`, this is required.
+      vmware_netmask:
+        type: str
+        required: false
+        description:
+          - The netmask to configure on the VM.
+          - If *vmware_network_type* is `static`, this is required.
+      vmware_gateway:
+        type: str
+        required: false
+        description:
+          - The gateway to configure on the VM.
+          - If *vmware_network_type* is `static`, this is required.
+      vmware_network_device_type:
+        type: str
+        required: false
+        default: vmxnet3
+        choices:
+          - e1000
+          - e1000e
+          - vmxnet3
+        description:
+          - The type of network device to configure on the VM.
+          - Unless you have a specific reason to change this, the default should be used.

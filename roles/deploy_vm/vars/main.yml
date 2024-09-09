@@ -1,0 +1,102 @@
+---
+_vmware_default_ram_in_gb: "{{ 4 if vmware_os_type == 'windows' else 2 }}"
+
+_vmware_datacenter: >-
+  {{ vmware_datacenter
+      if vmware_infrastructure_type == 'vcenter'
+      else 'ha-datacenter' }}
+
+_vmware_datacenter_folder_prefix: >-
+  {{ '/' + vmware_datacenter_folder | string
+      if vmware_datacenter_folder is defined
+      and vmware_infrastructure_type == 'vcenter'
+      else '' }}
+
+_vmware_datacenter_prefix: >-
+  {{ _vmware_datacenter_folder_prefix | string + '/' + _vmware_datacenter | string + '/vm' }}
+
+_vmware_folder: >-
+  {{ _vmware_datacenter_prefix | string + '/' + vmware_folder | string
+      if vmware_folder is defined
+      and vmware_infrastructure_type == 'vcenter'
+      else _vmware_datacenter_prefix }}
+
+_vmware_autologon: >-
+  {{ vmware_autologon_count | int > 0
+      if vmware_os_type == 'windows'
+      else omit }}
+
+_vmware_autologoncount: >-
+  {{ vmware_autologon_count | int
+      if vmware_os_type == 'windows'
+      and vmware_autologon_count | int > 0
+      else omit }}
+
+_vmware_fullname: >-
+  {{ vmware_full_name | default(omit)
+      if vmware_os_type == 'windows'
+      else omit }}
+
+_vmware_hwclockutc: >-
+  {{ vmware_hw_clock_is_utc | default(omit)
+      if vmware_os_type == 'linux'
+      else omit }}
+
+_vmware_joindomain: >-
+  {{ vmware_domain
+      if vmware_os_type == 'windows'
+      and vmware_join_domain
+      else omit }}
+
+_vmware_joinworkgroup: >-
+  {{ vmware_workgroup
+      if vmware_os_type == 'windows'
+      and not vmware_join_domain
+      else omit }}
+
+_vmware_orgname: >-
+  {{ vmware_organization | default(omit)
+      if vmware_os_type == 'windows'
+      else omit }}
+
+_vmware_password: >-
+  {{ vmware_administrator_password
+      if vmware_os_type == 'windows'
+      else omit }}
+
+_vmware_productid: >-
+  {{ vmware_product_id | default(omit)
+      if vmware_os_type == 'windows'
+      else omit }}
+
+_vmware_runonce: >-
+  {{ vmware_run_once_commands
+      if vmware_os_type == 'windows'
+      else omit }}
+
+_vmware_script_text: >-
+  {{ vmware_script_text | default(omit)
+      if vmware_os_type == 'linux'
+      else omit }}
+
+_vmware_memory_mb: >-
+  {{ vmware_ram_in_gb | default(_vmware_default_ram_in_gb) | int * 1024 }}
+
+_vmware_virt_based_security: >-
+  {{ vmware_virtualization_based_security | default(omit)
+      if vmware_os_type == 'windows'
+      else omit }}
+
+_vmware_network_dns_servers: >-
+  {{ vmware_dns_servers | default(omit)
+      if vmware_os_type == 'windows'
+      else omit }}
+
+_vmware_network_domain: >-
+  {{ vmware_domain | default(omit)
+      if vmware_os_type == 'windows'
+      else omit }}
+
+_vmware_gateway: "{{ vmware_gateway if vmware_network_type == 'static' else omit }}"
+_vmware_ip: "{{ vmware_ip if vmware_network_type == 'static' else omit }}"
+_vmware_netmask: "{{ vmware_netmask if vmware_network_type == 'static' else omit }}"

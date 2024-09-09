@@ -1,0 +1,35 @@
+---
+driver:
+  name: default
+platforms:
+  - name: instance
+provisioner:
+  name: ansible
+  inventory:
+    host_vars:
+      localhost:
+        vmware_hostname: ${VMWARE_HOSTNAME}
+        vmware_username: ${VMWARE_USERNAME}
+        vmware_password: ${VMWARE_PASSWORD}
+        vmware_infrastructure_type: esxi
+        vmware_os_type: linux
+        vmware_template: ${VMWARE_TEMPLATE}
+        vmware_custom_values:
+          - key: ${VMWARE_CUSTOM_VALUE_KEY}
+            value: ${VMWARE_CUSTOM_VALUE_VALUE}
+        vmware_name: ${VMWARE_NAME}
+        vmware_host: ${VMWARE_HOSTNAME}
+        vmware_datastore: ${VMWARE_DATASTORE}
+        vmware_vm_hostname: "{{ vmware_name | lower }}"
+        vmware_dns_suffixes:
+          - ${VMWARE_DOMAIN}
+        vmware_domain: ${VMWARE_DOMAIN}
+        vmware_timezone: ${VMWARE_TIMEZONE}
+        vmware_script_text: |
+          #!/bin/bash
+          echo "Hello, World!"
+        vmware_boot_firmware: efi
+        vmware_secure_boot: true
+        vmware_nested_virtualization: true
+        vmware_network_name: ${VMWARE_NETWORK_NAME}
+        vmware_network_type: dhcp

@@ -1,0 +1,70 @@
+---
+- name: Check if VMware VM exists
+  delegate_to: localhost
+  community.vmware.vmware_guest_info:
+    hostname: "{{ vmware_hostname }}"
+    username: "{{ vmware_username }}"
+    password: "{{ vmware_password }}"
+    validate_certs: "{{ vmware_validate_certs }}"
+    datacenter: "{{ _vmware_datacenter }}"
+    folder: "{{ _vmware_folder }}"
+    name: "{{ vmware_name }}"
+  register: _vmware_host_info
+  ignore_errors: true
+
+- name: Deploy VM
+  when:
+    - _vmware_host_info is failed
+  delegate_to: localhost
+  community.vmware.vmware_guest:
+    hostname: "{{ vmware_hostname }}"
+    username: "{{ vmware_username }}"
+    password: "{{ vmware_password }}"
+    validate_certs: "{{ vmware_validate_certs }}"
+    name: "{{ vmware_name }}"
+    datacenter: "{{ _vmware_datacenter }}"
+    folder: "{{ _vmware_folder }}"
+    cluster: "{{ vmware_cluster | default(omit) }}"
+    esxi_hostname: "{{ vmware_host | default(omit) }}"
+    datastore: "{{ vmware_datastore }}"
+    template: "{{ vmware_template }}"
+    customvalues: "{{ vmware_custom_values | default(omit) }}"
+    wait_for_ip_address: true
+    wait_for_customization: true
+    state: poweredon
+    customization:
+      autologon: "{{ _vmware_autologon }}"
+      autologoncount: "{{ _vmware_autologoncount }}"
+      dns_servers: "{{ vmware_dns_servers | default(omit) }}"
+      dns_suffix: "{{ vmware_dns_suffixes | default(omit) }}"
+      domain: "{{ vmware_domain | default(omit) }}"
+      fullname: "{{ _vmware_fullname }}"
+      hostname: "{{ vmware_vm_hostname }}"
+      hwclockUTC: "{{ _vmware_hwclockutc }}"
+      joindomain: "{{ _vmware_joindomain }}"
+      joinworkgroup: "{{ _vmware_joinworkgroup }}"
+      orgname: "{{ _vmware_orgname }}"
+      password: "{{ _vmware_password }}"
+      productid: "{{ _vmware_productid }}"
+      runonce: "{{ _vmware_runonce }}"
+      script_text: "{{ _vmware_script_text }}"
+      timezone: "{{ vmware_timezone | default(omit) }}"
+    hardware:
+      boot_firmware: "{{ vmware_boot_firmware }}"
+      memory_mb: "{{ _vmware_memory_mb }}"
+      nested_virt: "{{ vmware_nested_virtualization | default(omit) }}"
+      num_cpus: "{{ vmware_cpus }}"
+      num_cpu_cores_per_socket: "{{ vmware_cpus }}"
+      secure_boot: "{{ vmware_secure_boot }}"
+      virt_based_security: "{{ _vmware_virt_based_security }}"
+    networks:
+      - connected: true
+        device_type: "{{ vmware_network_device_type }}"
+        dns_servers: "{{ _vmware_network_dns_servers }}"
+        domain: "{{ _vmware_network_domain }}"
+        gateway: "{{ _vmware_gateway }}"
+        ip: "{{ _vmware_ip }}"
+        name: "{{ vmware_network_name }}"
+        netmask: "{{ _vmware_netmask }}"
+        start_connected: true
+        type: "{{ vmware_network_type }}"

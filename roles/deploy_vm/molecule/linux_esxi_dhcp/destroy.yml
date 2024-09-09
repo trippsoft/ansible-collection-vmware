@@ -1,0 +1,40 @@
+---
+- name: Destroy
+  hosts:
+    - localhost
+  connection: local
+  gather_facts: false
+  no_log: "{{ molecule_no_log }}"
+  tasks:
+    - name: Power off VMware VM
+      community.vmware.vmware_guest:
+        hostname: "{{ vmware_hostname }}"
+        username: "{{ vmware_username }}"
+        password: "{{ vmware_password }}"
+        validate_certs: "{{ vmware_validate_certs | default(true) }}"
+        cluster: "{{ vmware_cluster }}"
+        datacenter: ha-datacenter
+        folder: /ha-datacenter/vm
+        name: "{{ vmware_name }}"
+        state: poweredoff
+      failed_when: false
+
+    - name: Delete VMware VM
+      community.vmware.vmware_guest:
+        hostname: "{{ vmware_hostname }}"
+        username: "{{ vmware_username }}"
+        password: "{{ vmware_password }}"
+        validate_certs: "{{ vmware_validate_certs | default(true) }}"
+        cluster: "{{ vmware_cluster }}"
+        datacenter: ha-datacenter
+        folder: /ha-datacenter/vm
+        name: "{{ vmware_name }}"
+        state: absent
+
+    - name: Dump instance config
+      ansible.builtin.copy:
+        content: |
+          # Molecule managed
+
+        dest: "{{ molecule_instance_config }}"
+        mode: "0600"

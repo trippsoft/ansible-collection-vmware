@@ -1,0 +1,14 @@
+---
+vmware_validate_certs: true
+
+vmware_allow_long_hostnames: false
+vmware_autologon_count: 1
+vmware_join_domain: false
+vmware_workgroup: WORKGROUP
+vmware_run_once_commands: []
+vmware_boot_firmware: efi
+vmware_secure_boot: true
+vmware_cpus: 2
+
+vmware_network_type: dhcp
+vmware_network_device_type: vmxnet3
