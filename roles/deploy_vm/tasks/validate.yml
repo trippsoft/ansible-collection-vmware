@@ -6,7 +6,7 @@
     username: "{{ vmware_username }}"
     password: "{{ vmware_password }}"
     validate_certs: "{{ vmware_validate_certs }}"
-    datacenter: "{{ _vmware_datacenter }}"
+    datacenter: "{{ vmware_datacenter }}"
     name: "{{ vmware_template }}"
   register: _vmware_template_info
   ignore_errors: true
@@ -18,34 +18,23 @@
     fail_msg: "VMware template '{{ vmware_template }}' does not exist."
     success_msg: "VMware template '{{ vmware_template }}' exists."
 
-- name: Validate VMware datacenter
-  when:
-    - vmware_infrastructure_type == 'vcenter'
-  block:
-    - name: Validate VMware datacenter is defined
-      ansible.builtin.assert:
-        that:
-          - vmware_datacenter is defined
-        fail_msg: "The 'vmware_datacenter' variable is required when deploying to vCenter."
-        success_msg: "The 'vmware_datacenter' variable is defined."
+- name: Check if VMware datacenter exists
+  delegate_to: localhost
+  community.vmware.vmware_datacenter_info:
+    hostname: "{{ vmware_hostname }}"
+    username: "{{ vmware_username }}"
+    password: "{{ vmware_password }}"
+    validate_certs: "{{ vmware_validate_certs }}"
+    datacenter: "{{ vmware_datacenter }}"
+  register: _vmware_datacenter_info
+  ignore_errors: true
 
-    - name: Check if VMware datacenter exists
-      delegate_to: localhost
-      community.vmware.vmware_datacenter_info:
-        hostname: "{{ vmware_hostname }}"
-        username: "{{ vmware_username }}"
-        password: "{{ vmware_password }}"
-        validate_certs: "{{ vmware_validate_certs }}"
-        datacenter: "{{ vmware_datacenter }}"
-      register: _vmware_datacenter_info
-      ignore_errors: true
-
-    - name: Validate VMware datacenter exists
-      ansible.builtin.assert:
-        that:
-          - not _vmware_datacenter_info.failed
-        fail_msg: "VMware datacenter '{{ vmware_datacenter }}' does not exist."
-        success_msg: "VMware datacenter '{{ vmware_datacenter }}' exists."
+- name: Validate VMware datacenter exists
+  ansible.builtin.assert:
+    that:
+      - not _vmware_datacenter_info.failed
+    fail_msg: "VMware datacenter '{{ vmware_datacenter }}' does not exist."
+    success_msg: "VMware datacenter '{{ vmware_datacenter }}' exists."
 
 - name: Validate VMware cluster or host is defined
   ansible.builtin.assert:
@@ -97,7 +86,7 @@
         username: "{{ vmware_username }}"
         password: "{{ vmware_password }}"
         validate_certs: "{{ vmware_validate_certs }}"
-        datacenter: "{{ _vmware_datacenter }}"
+        datacenter: "{{ vmware_datacenter }}"
         cluster_name: "{{ vmware_cluster }}"
       register: _vmware_cluster_info
       ignore_errors: true
@@ -116,7 +105,7 @@
     username: "{{ vmware_username }}"
     password: "{{ vmware_password }}"
     validate_certs: "{{ vmware_validate_certs }}"
-    datacenter: "{{ _vmware_datacenter }}"
+    datacenter: "{{ vmware_datacenter }}"
     name: "{{ vmware_datastore }}"
   register: _vmware_datastore_info
   ignore_errors: true

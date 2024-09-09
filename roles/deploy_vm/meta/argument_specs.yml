@@ -28,14 +28,6 @@ argument_specs:
         default: true
         description:
           - Whether to validate SSL certificates.
-      vmware_infrastructure_type:
-        type: str
-        required: true
-        choices:
-          - vcenter
-          - esxi
-        description:
-          - The type of VMware infrastructure to which to deploy the VM.
       vmware_os_type:
         type: str
         required: true
@@ -74,23 +66,20 @@ argument_specs:
           - The name of the VM to be deployed.
       vmware_datacenter:
         type: str
-        required: false
+        required: true
         description:
           - The name of the datacenter in which to deploy the VM.
-          - If *vmware_infrastructure_type* is `vcenter`, this is required. Otherwise, it is ignored and `ha-datacenter` is used.
       vmware_datacenter_folder:
         type: str
         required: false
         description:
           - The name of the folder in which the datacenter exists to deploy the VM.
-          - If *vmware_infrastructure_type* is `vcenter`, this is optional. Otherwise, it is ignored.
       vmware_folder:
         type: str
         required: false
         description:
           - The name of the folder in which to deploy the VM.
           - If not provided, the VM is deployed in the root folder of the datacenter.
-          - If *vmware_infrastructure_type* is `vcenter`, this is optional. Otherwise, it is ignored.
       vmware_cluster:
         type: str
         required: false
