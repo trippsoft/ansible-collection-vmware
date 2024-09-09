@@ -274,6 +274,75 @@
     fail_msg: "Memory size '{{ vmware_ram_in_gb }}' is not a valid number.  It must be greater than 0, less than or equal to 24560, and a multiple of 4."
     success_msg: "Memory size '{{ vmware_ram_in_gb }}' is a valid number."
 
+- name: Validate distributed vSwitch
+  when:
+    - vmware_dv_switch_name is defined
+  block:
+    - name: Check if distributed vSwitch exists
+      delegate_to: localhost
+      community.vmware.vmware_dvswitch_info:
+        hostname: "{{ vmware_hostname }}"
+        username: "{{ vmware_username }}"
+        password: "{{ vmware_password }}"
+        validate_certs: "{{ vmware_validate_certs }}"
+        switch_name: "{{ vmware_dv_switch_name }}"
+      register: _vmware_dv_switch_info
+      ignore_errors: true
+
+    - name: Validate distributed vSwitch exists
+      ansible.builtin.assert:
+        that:
+          - not _vmware_dv_switch_info.failed
+        fail_msg: "Distributed vSwitch '{{ vmware_dv_switch_name }}' does not exist."
+        success_msg: "Distributed vSwitch '{{ vmware_dv_switch_name }}' exists."
+
+    - name: Check if distributed port group exists
+      delegate_to: localhost
+      community.vmware.vmware_dvs_portgroup_info:
+        hostname: "{{ vmware_hostname }}"
+        username: "{{ vmware_username }}"
+        password: "{{ vmware_password }}"
+        validate_certs: "{{ vmware_validate_certs }}"
+        datacenter: "{{ vmware_datacenter }}"
+        dvswitch: "{{ vmware_dv_switch_name }}"
+      register: _vmware_dv_portgroup_info
+
+    - name: Validate distributed port group exists
+      ansible.builtin.assert:
+        that:
+          - _vmware_dv_portgroup_info.dvs_portgroup_info[vmware_dv_switch_name] |
+            selectattr('name', 'equalto', vmware_network_name) |
+            list | count > 0
+        fail_msg: "Distributed port group '{{ vmware_network_name }}' does not exist."
+        success_msg: "Distributed port group '{{ vmware_network_name }}' exists."
+
+- name: Validate standard port group
+  when:
+    - vmware_dv_switch_name is not defined
+  block:
+    - name: Check if standard port group exists
+      delegate_to: localhost
+      community.vmware.vmware_portgroup_info:
+        hostname: "{{ vmware_hostname }}"
+        username: "{{ vmware_username }}"
+        password: "{{ vmware_password }}"
+        validate_certs: "{{ vmware_validate_certs }}"
+        cluster_name: "{{ vmware_cluster | default(omit) }}"
+        esxi_hostname: "{{ vmware_host | default(omit) }}"
+      register: _vmware_portgroup_info
+      ignore_errors: true
+
+    - name: Validate standard port group exists
+      ansible.builtin.assert:
+        that:
+          - _vmware_portgroup_info.hosts_portgroup_info |
+            dict2items |
+            map(attribute='value') |
+            selectattr('portgroup', 'equalto', vmware_network_name) |
+            list | count > 0
+        fail_msg: "Standard port group '{{ vmware_network_name }}' does not exist."
+        success_msg: "Standard port group '{{ vmware_network_name }}' exists."
+
 - name: Validate IP address
   when:
     - vmware_network_type == 'static'
