@@ -6,7 +6,7 @@
     username: "{{ vmware_username }}"
     password: "{{ vmware_password }}"
     validate_certs: "{{ vmware_validate_certs }}"
-    datacenter: "{{ _vmware_datacenter }}"
+    datacenter: "{{ vmware_datacenter }}"
     folder: "{{ _vmware_folder }}"
     name: "{{ vmware_name }}"
   register: _vmware_host_info
@@ -22,7 +22,7 @@
     password: "{{ vmware_password }}"
     validate_certs: "{{ vmware_validate_certs }}"
     name: "{{ vmware_name }}"
-    datacenter: "{{ _vmware_datacenter }}"
+    datacenter: "{{ vmware_datacenter }}"
     folder: "{{ _vmware_folder }}"
     cluster: "{{ vmware_cluster | default(omit) }}"
     esxi_hostname: "{{ vmware_host | default(omit) }}"
