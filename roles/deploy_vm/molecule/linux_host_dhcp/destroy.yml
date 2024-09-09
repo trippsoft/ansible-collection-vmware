@@ -12,8 +12,7 @@
         username: "{{ vmware_username }}"
         password: "{{ vmware_password }}"
         validate_certs: false
-        datacenter: ha-datacenter
-        folder: /ha-datacenter/vm
+        datacenter: "{{ vmware_datacenter }}"
         name: "{{ vmware_name }}"
         state: poweredoff
       failed_when: false
@@ -24,8 +23,7 @@
         username: "{{ vmware_username }}"
         password: "{{ vmware_password }}"
         validate_certs: false
-        datacenter: ha-datacenter
-        folder: /ha-datacenter/vm
+        datacenter: "{{ vmware_datacenter }}"
         name: "{{ vmware_name }}"
         state: absent
 
