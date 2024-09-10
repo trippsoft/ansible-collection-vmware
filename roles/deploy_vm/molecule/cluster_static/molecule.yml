@@ -31,7 +31,6 @@ provisioner:
         vmware_domain: ${VMWARE_DOMAIN}
         vmware_full_name: ${VMWARE_FULL_NAME:-''}
         vmware_organization: ${VMWARE_ORGANIZATION:-''}
-        vmware_product_id: ${VMWARE_PRODUCT_ID:-''}
         vmware_timezone: ${VMWARE_TIMEZONE}
         vmware_administrator_password: ${VMWARE_ADMINISTRATOR_PASSWORD:-''}
         vmware_join_domain: ${VMWARE_JOIN_DOMAIN:-false}
