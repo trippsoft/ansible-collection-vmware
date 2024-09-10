@@ -60,7 +60,7 @@ _vmware_productid: >-
       else omit }}
 
 _vmware_runonce: >-
-  {{ vmware_run_once_commands
+  {{ vmware_run_once_commands | default(omit)
       if vmware_os_type == 'windows'
       else omit }}
 
