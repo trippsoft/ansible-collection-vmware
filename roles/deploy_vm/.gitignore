@@ -1,0 +1,2 @@
+# Testing scripts contain environment variables that should not be shared
+*.sh
