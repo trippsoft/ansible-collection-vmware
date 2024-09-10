@@ -365,15 +365,15 @@
       ansible.builtin.assert:
         that:
           - vmware_netmask is defined
-        fail_msg: "Subnet mask '{{ vmware_subnet_mask }}' is not defined. It must be defined when using a static network configuration."
-        success_msg: "Subnet mask '{{ vmware_subnet_mask }}' is defined."
+        fail_msg: "Subnet mask '{{ vmware_netmask }}' is not defined. It must be defined when using a static network configuration."
+        success_msg: "Subnet mask '{{ vmware_netmask }}' is defined."
 
     - name: Validate subnet mask
       ansible.builtin.assert:
         that:
           - vmware_netmask is ansible.utils.ipv4_netmask
-        fail_msg: "Subnet mask '{{ vmware_subnet_mask }}' is not a valid IPv4 subnet mask."
-        success_msg: "Subnet mask '{{ vmware_subnet_mask }}' is a valid IPv4 subnet mask."
+        fail_msg: "Subnet mask '{{ vmware_netmask }}' is not a valid IPv4 subnet mask."
+        success_msg: "Subnet mask '{{ vmware_netmask }}' is a valid IPv4 subnet mask."
 
     - name: Validate gateway is defined
       ansible.builtin.assert:
