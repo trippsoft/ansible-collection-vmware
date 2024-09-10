@@ -10,11 +10,11 @@
     folder: "{{ _vmware_folder }}"
     name: "{{ vmware_name }}"
   register: _vmware_host_info
-  ignore_errors: true
+  failed_when: false
 
 - name: Deploy VM
   when:
-    - _vmware_host_info is failed
+    - ('non-existing VM' in _vmware_host_info.msg | default(''))
   delegate_to: localhost
   community.vmware.vmware_guest:
     hostname: "{{ vmware_hostname }}"
