@@ -64,11 +64,6 @@ _vmware_runonce: >-
       if vmware_os_type == 'windows'
       else omit }}
 
-_vmware_script_text: >-
-  {{ vmware_script_text | default(omit)
-      if vmware_os_type == 'linux'
-      else omit }}
-
 _vmware_memory_mb: >-
   {{ vmware_ram_in_gb | default(_vmware_default_ram_in_gb) | int * 1024 }}
 

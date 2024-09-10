@@ -213,12 +213,6 @@ argument_specs:
         description:
           - Whether the hardware clock on the VM is set to UTC.
           - If *vmware_os_type* is `windows`, this is ignored.
-      vmware_script_text:
-        type: str
-        required: false
-        description:
-          - The script text to configure on the Linux VM.
-          - If *vmware_os_type* is `windows`, this is ignored.
       vmware_boot_firmware:
         type: str
         required: false

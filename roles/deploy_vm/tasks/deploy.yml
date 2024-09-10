@@ -47,7 +47,6 @@
       password: "{{ _vmware_password }}"
       productid: "{{ _vmware_productid }}"
       runonce: "{{ _vmware_runonce }}"
-      script_text: "{{ _vmware_script_text }}"
       timezone: "{{ vmware_timezone | default(omit) }}"
     hardware:
       boot_firmware: "{{ vmware_boot_firmware }}"
