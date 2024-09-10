@@ -12,11 +12,14 @@
   register: _vmware_host_info
   failed_when: false
 
+# Using custom vmware_guest module because of MAC address bug that has taken too long to merge.
+# Once merged, this task can be replaced with the community.vmware.vmware_guest module.
+
 - name: Deploy VM
   when:
     - ('non-existing VM' in _vmware_host_info.msg | default(''))
   delegate_to: localhost
-  community.vmware.vmware_guest:
+  trippsc2.vmware.vmware_guest:
     hostname: "{{ vmware_hostname }}"
     username: "{{ vmware_username }}"
     password: "{{ vmware_password }}"
