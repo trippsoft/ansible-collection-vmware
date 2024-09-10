@@ -30,10 +30,6 @@ provisioner:
         vmware_organization: ${VMWARE_ORGANIZATION:-''}
         vmware_timezone: ${VMWARE_TIMEZONE}
         vmware_administrator_password: ${VMWARE_ADMINISTRATOR_PASSWORD:-''}
-        vmware_join_domain: ${VMWARE_JOIN_DOMAIN:-false}
-        vmware_domain_username: ${VMWARE_DOMAIN_USERNAME:-''}
-        vmware_domain_password: ${VMWARE_DOMAIN_PASSWORD:-''}
-        vmware_workgroup: ${VMWARE_WORKGROUP:-''}
         vmware_hw_clock_is_utc: true
         vmware_boot_firmware: efi
         vmware_secure_boot: true
