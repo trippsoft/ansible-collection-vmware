@@ -37,7 +37,7 @@ provisioner:
         vmware_domain_username: ${VMWARE_DOMAIN_USERNAME:-''}
         vmware_domain_password: ${VMWARE_DOMAIN_PASSWORD:-''}
         vmware_workgroup: ${VMWARE_WORKGROUP:-''}
-        vmware_hw_clock_is_utc: ${VMWARE_HW_CLOCK_IS_UTC:-true}
+        vmware_hw_clock_is_utc: true
         vmware_boot_firmware: efi
         vmware_secure_boot: true
         vmware_nested_virtualization: true
