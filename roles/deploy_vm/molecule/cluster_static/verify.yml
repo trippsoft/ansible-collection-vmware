@@ -21,7 +21,3 @@
           - not _vmware_vm_info.failed
         fail_msg: "VMware VM '{{ vmware_name }}' does not exist."
         success_msg: "VMware VM '{{ vmware_name }}' exists."
-
-    - name: Debug
-      ansible.builtin.debug:
-        var: _vmware_vm_info
