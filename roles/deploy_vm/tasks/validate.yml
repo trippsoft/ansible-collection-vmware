@@ -351,8 +351,8 @@
       ansible.builtin.assert:
         that:
           - vmware_ip is defined
-        fail_msg: "IP address '{{ vmware_ip }}' is not defined. It must be defined when using a static network configuration."
-        success_msg: "IP address '{{ vmware_ip }}' is defined."
+        fail_msg: "The 'vmware_ip' variable is not defined. It must be defined when using a static network configuration."
+        success_msg: "The 'vmware_ip' variable is defined."
 
     - name: Validate IP address
       ansible.builtin.assert:
@@ -365,8 +365,8 @@
       ansible.builtin.assert:
         that:
           - vmware_netmask is defined
-        fail_msg: "Subnet mask '{{ vmware_netmask }}' is not defined. It must be defined when using a static network configuration."
-        success_msg: "Subnet mask '{{ vmware_netmask }}' is defined."
+        fail_msg: "The 'vmware_netmask' variable is not defined. It must be defined when using a static network configuration."
+        success_msg: "The 'vmware_netmask' variable is defined."
 
     - name: Validate subnet mask
       ansible.builtin.assert:
@@ -379,8 +379,8 @@
       ansible.builtin.assert:
         that:
           - vmware_gateway is defined
-        fail_msg: "Gateway '{{ vmware_gateway }}' is not defined. It must be defined when using a static network configuration."
-        success_msg: "Gateway '{{ vmware_gateway }}' is not defined."
+        fail_msg: "The 'vmware_gateway' variable is not defined. It must be defined when using a static network configuration."
+        success_msg: "The 'vmware_gateway' variable is not defined."
 
     - name: Validate gateway
       ansible.builtin.assert:
