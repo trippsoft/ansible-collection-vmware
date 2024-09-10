@@ -343,29 +343,48 @@
         fail_msg: "Standard port group '{{ vmware_network_name }}' does not exist."
         success_msg: "Standard port group '{{ vmware_network_name }}' exists."
 
-- name: Validate IP address
+- name: Validate static network configuration
   when:
     - vmware_network_type == 'static'
-  ansible.builtin.assert:
-    that:
-      - vmware_ip is ansible.utils.ipv4_address
-    fail_msg: "IP address '{{ vmware_ip }}' is not a valid IPv4 address."
-    success_msg: "IP address '{{ vmware_ip }}' is a valid IPv4 address."
+  block:
+    - name: Validate IP address is defined
+      ansible.builtin.assert:
+        that:
+          - vmware_ip is defined
+        fail_msg: "IP address '{{ vmware_ip }}' is not defined. It must be defined when using a static network configuration."
+        success_msg: "IP address '{{ vmware_ip }}' is defined."
 
-- name: Validate subnet mask
-  when:
-    - vmware_network_type == 'static'
-  ansible.builtin.assert:
-    that:
-      - vmware_subnet_mask is ansible.utils.ipv4_netmask
-    fail_msg: "Subnet mask '{{ vmware_subnet_mask }}' is not a valid IPv4 subnet mask."
-    success_msg: "Subnet mask '{{ vmware_subnet_mask }}' is a valid IPv4 subnet mask."
+    - name: Validate IP address
+      ansible.builtin.assert:
+        that:
+          - vmware_ip is ansible.utils.ipv4_address
+        fail_msg: "IP address '{{ vmware_ip }}' is not a valid IPv4 address."
+        success_msg: "IP address '{{ vmware_ip }}' is a valid IPv4 address."
 
-- name: Validate gateway
-  when:
-    - vmware_network_type == 'static'
-  ansible.builtin.assert:
-    that:
-      - vmware_gateway is ansible.utils.ipv4_address
-    fail_msg: "Gateway '{{ vmware_gateway }}' is not a valid IPv4 address."
-    success_msg: "Gateway '{{ vmware_gateway }}' is a valid IPv4 address."
+    - name: Validate subnet mask is defined
+      ansible.builtin.assert:
+        that:
+          - vmware_netmask is defined
+        fail_msg: "Subnet mask '{{ vmware_subnet_mask }}' is not defined. It must be defined when using a static network configuration."
+        success_msg: "Subnet mask '{{ vmware_subnet_mask }}' is defined."
+
+    - name: Validate subnet mask
+      ansible.builtin.assert:
+        that:
+          - vmware_netmask is ansible.utils.ipv4_netmask
+        fail_msg: "Subnet mask '{{ vmware_subnet_mask }}' is not a valid IPv4 subnet mask."
+        success_msg: "Subnet mask '{{ vmware_subnet_mask }}' is a valid IPv4 subnet mask."
+
+    - name: Validate gateway is defined
+      ansible.builtin.assert:
+        that:
+          - vmware_gateway is defined
+        fail_msg: "Gateway '{{ vmware_gateway }}' is not defined. It must be defined when using a static network configuration."
+        success_msg: "Gateway '{{ vmware_gateway }}' is not defined."
+
+    - name: Validate gateway
+      ansible.builtin.assert:
+        that:
+          - vmware_gateway is ansible.utils.ipv4_address
+        fail_msg: "Gateway '{{ vmware_gateway }}' is not a valid IPv4 address."
+        success_msg: "Gateway '{{ vmware_gateway }}' is a valid IPv4 address."
