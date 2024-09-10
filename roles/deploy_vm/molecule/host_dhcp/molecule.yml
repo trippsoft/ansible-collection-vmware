@@ -12,20 +12,30 @@ provisioner:
         vmware_username: ${VMWARE_USERNAME}
         vmware_password: ${VMWARE_PASSWORD}
         vmware_validate_certs: false
-        vmware_os_type: linux
+        vmware_os_type: ${VMWARE_OS_TYPE}
         vmware_template: ${VMWARE_TEMPLATE}
         vmware_custom_values:
           - key: ${VMWARE_CUSTOM_VALUE_KEY}
             value: ${VMWARE_CUSTOM_VALUE_VALUE}
         vmware_name: ${VMWARE_NAME}
         vmware_datacenter: ${VMWARE_DATACENTER}
+        vmware_folder: ${VMWARE_FOLDER}
         vmware_host: ${VMWARE_HOST}
         vmware_datastore: ${VMWARE_DATASTORE}
-        vmware_vm_hostname: "{{ vmware_name | lower }}"
+        vmware_vm_hostname: ${VMWARE_VM_HOSTNAME}
         vmware_dns_suffixes:
           - ${VMWARE_DOMAIN}
         vmware_domain: ${VMWARE_DOMAIN}
+        vmware_full_name: ${VMWARE_FULL_NAME:-''}
+        vmware_organization: ${VMWARE_ORGANIZATION:-''}
+        vmware_product_id: ${VMWARE_PRODUCT_ID:-''}
         vmware_timezone: ${VMWARE_TIMEZONE}
+        vmware_administrator_password: ${VMWARE_ADMINISTRATOR_PASSWORD:-''}
+        vmware_join_domain: ${VMWARE_JOIN_DOMAIN:-false}
+        vmware_domain_username: ${VMWARE_DOMAIN_USERNAME:-''}
+        vmware_domain_password: ${VMWARE_DOMAIN_PASSWORD:-''}
+        vmware_workgroup: ${VMWARE_WORKGROUP:-''}
+        vmware_hw_clock_is_utc: ${VMWARE_HW_CLOCK_IS_UTC:-true}
         vmware_boot_firmware: efi
         vmware_secure_boot: true
         vmware_nested_virtualization: true
