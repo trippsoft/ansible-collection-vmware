@@ -311,7 +311,7 @@
       ansible.builtin.assert:
         that:
           - _vmware_dv_portgroup_info.dvs_portgroup_info[vmware_dv_switch_name] |
-            selectattr('name', 'equalto', vmware_network_name) |
+            selectattr('portgroup_name', 'equalto', vmware_network_name) |
             list | count > 0
         fail_msg: "Distributed port group '{{ vmware_network_name }}' does not exist."
         success_msg: "Distributed port group '{{ vmware_network_name }}' exists."
