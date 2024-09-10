@@ -37,3 +37,8 @@ provisioner:
         vmware_network_name: ${VMWARE_NETWORK_NAME}
         vmware_dv_switch_name: ${VMWARE_DVS_NAME}
         vmware_network_type: dhcp
+  playbooks:
+    create: ../common/create.yml
+    converge: ../common/converge.yml
+    destroy: ../common/destroy.yml
+    verify: ../common/verify.yml

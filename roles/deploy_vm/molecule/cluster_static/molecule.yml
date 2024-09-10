@@ -43,3 +43,8 @@ provisioner:
         vmware_ip: ${VMWARE_IP}
         vmware_netmask: ${VMWARE_NETMASK}
         vmware_gateway: ${VMWARE_GATEWAY}
+  playbooks:
+    create: ../common/create.yml
+    converge: ../common/converge.yml
+    destroy: ../common/destroy.yml
+    verify: ../common/verify.yml

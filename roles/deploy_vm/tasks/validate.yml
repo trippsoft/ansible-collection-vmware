@@ -33,6 +33,7 @@
   ansible.builtin.assert:
     that:
       - not _vmware_datacenter_info.failed
+      - _vmware_datacenter_info.datacenter_info | length > 0
     fail_msg: "VMware datacenter '{{ vmware_datacenter }}' does not exist."
     success_msg: "VMware datacenter '{{ vmware_datacenter }}' exists."
 
@@ -72,6 +73,7 @@
       ansible.builtin.assert:
         that:
           - not _vmware_host_info.failed
+          - _vmware_host_info.ansible_facts | length > 0
         fail_msg: "VMware host '{{ vmware_host }}' does not exist."
         success_msg: "VMware host '{{ vmware_host }}' exists."
 
@@ -95,6 +97,7 @@
       ansible.builtin.assert:
         that:
           - not _vmware_cluster_info.failed
+          - _vmware_cluster_info.clusters | length > 0
         fail_msg: "VMware cluster '{{ vmware_cluster }}' does not exist."
         success_msg: "VMware cluster '{{ vmware_cluster }}' exists."
 
@@ -114,6 +117,7 @@
   ansible.builtin.assert:
     that:
       - not _vmware_datastore_info.failed
+      - _vmware_datastore_info.datastores | length > 0
     fail_msg: "VMware datastore '{{ vmware_datastore }}' does not exist."
     success_msg: "VMware datastore '{{ vmware_datastore }}' exists."
 
@@ -293,6 +297,7 @@
       ansible.builtin.assert:
         that:
           - not _vmware_dv_switch_info.failed
+          - _vmware_dv_switch_info.distributed_virtual_switches | length > 0
         fail_msg: "Distributed vSwitch '{{ vmware_dv_switch_name }}' does not exist."
         success_msg: "Distributed vSwitch '{{ vmware_dv_switch_name }}' exists."
 
