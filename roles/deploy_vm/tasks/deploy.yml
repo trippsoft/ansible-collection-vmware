@@ -71,3 +71,4 @@
         netmask: "{{ _vmware_netmask }}"
         start_connected: true
         type: "{{ vmware_network_type }}"
+  register: _vmware_vm_deploy
