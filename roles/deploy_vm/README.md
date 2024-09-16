@@ -1,7 +1,7 @@
 <!-- BEGIN_ANSIBLE_DOCS -->
 
 # Ansible Role: trippsc2.vmware.deploy_vm
-Version: 1.1.0
+Version: 1.1.1
 
 This role runs Bleachbit from a portable executable on Windows systems.
 
@@ -17,10 +17,10 @@ This role runs Bleachbit from a portable executable on Windows systems.
 ## Role Arguments
 |Option|Description|Type|Required|Choices|Default|
 |---|---|---|---|---|---|
-| vmware_hostname | <p>The FQDN or IP address of the VMware infrastructure to which the VM will be deployed.</p> | str | yes |  |  |
-| vmware_username | <p>The username for authenticating with the VMware infrastructure.</p> | str | yes |  |  |
-| vmware_password | <p>The password for authenticating with the VMware infrastructure.</p> | str | yes |  |  |
-| vmware_validate_certs | <p>Whether to validate SSL certificates.</p> | bool | no |  | true |
+| vmware_hostname | <p>The FQDN or IP address of the VMware infrastructure to which the VM will be deployed.</p> | str | no |  |  |
+| vmware_username | <p>The username for authenticating with the VMware infrastructure.</p> | str | no |  |  |
+| vmware_password | <p>The password for authenticating with the VMware infrastructure.</p> | str | no |  |  |
+| vmware_validate_certs | <p>Whether to validate SSL certificates.</p> | bool | no |  | false |
 | vmware_os_type | <p>The type of operating system installed on the VM to be deployed.</p><p>This value is used to determine which customization options are available.</p> | str | yes | <ul><li>linux</li><li>windows</li></ul> |  |
 | vmware_template | <p>The name of the template from which to deploy the VM.</p> | str | yes |  |  |
 | vmware_custom_values | <p>A list of custom values to configure on the VM.</p> | list of dicts of 'vmware_custom_values' options | no |  |  |
