@@ -8,24 +8,23 @@ argument_specs:
     options:
       vmware_hostname:
         type: str
-        required: true
+        required: false
         description:
           - The FQDN or IP address of the VMware infrastructure to which the VM will be deployed.
       vmware_username:
         type: str
-        required: true
+        required: false
         description:
           - The username for authenticating with the VMware infrastructure.
       vmware_password:
         type: str
-        required: true
+        required: false
         no_log: true
         description:
           - The password for authenticating with the VMware infrastructure.
       vmware_validate_certs:
         type: bool
         required: false
-        default: true
         description:
           - Whether to validate SSL certificates.
       vmware_os_type:

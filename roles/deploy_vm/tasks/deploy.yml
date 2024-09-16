@@ -2,10 +2,10 @@
 - name: Check if VMware VM exists
   delegate_to: localhost
   community.vmware.vmware_guest_info:
-    hostname: "{{ vmware_hostname }}"
-    username: "{{ vmware_username }}"
-    password: "{{ vmware_password }}"
-    validate_certs: "{{ vmware_validate_certs }}"
+    hostname: "{{ vmware_hostname | default(omit) }}"
+    username: "{{ vmware_username | default(omit) }}"
+    password: "{{ vmware_password | default(omit) }}"
+    validate_certs: "{{ vmware_validate_certs | default(omit) }}"
     datacenter: "{{ vmware_datacenter }}"
     folder: "{{ _vmware_folder }}"
     name: "{{ vmware_name }}"
@@ -20,10 +20,10 @@
     - ('non-existing VM' in _vmware_host_info.msg | default(''))
   delegate_to: localhost
   trippsc2.vmware.vmware_guest:
-    hostname: "{{ vmware_hostname }}"
-    username: "{{ vmware_username }}"
-    password: "{{ vmware_password }}"
-    validate_certs: "{{ vmware_validate_certs }}"
+    hostname: "{{ vmware_hostname | default(omit) }}"
+    username: "{{ vmware_username | default(omit) }}"
+    password: "{{ vmware_password | default(omit) }}"
+    validate_certs: "{{ vmware_validate_certs | default(omit) }}"
     name: "{{ vmware_name }}"
     datacenter: "{{ vmware_datacenter }}"
     folder: "{{ _vmware_folder }}"

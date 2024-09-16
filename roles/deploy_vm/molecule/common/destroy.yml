@@ -8,9 +8,9 @@
   tasks:
     - name: Power off VMware VM
       community.vmware.vmware_guest:
-        hostname: "{{ vmware_hostname }}"
-        username: "{{ vmware_username }}"
-        password: "{{ vmware_password }}"
+        hostname: "{{ vmware_hostname | default(omit) }}"
+        username: "{{ vmware_username | default(omit) }}"
+        password: "{{ vmware_password | default(omit) }}"
         validate_certs: false
         datacenter: "{{ vmware_datacenter }}"
         name: "{{ vmware_name }}"
@@ -19,9 +19,9 @@
 
     - name: Delete VMware VM
       community.vmware.vmware_guest:
-        hostname: "{{ vmware_hostname }}"
-        username: "{{ vmware_username }}"
-        password: "{{ vmware_password }}"
+        hostname: "{{ vmware_hostname | default(omit) }}"
+        username: "{{ vmware_username | default(omit) }}"
+        password: "{{ vmware_password | default(omit) }}"
         validate_certs: false
         datacenter: "{{ vmware_datacenter }}"
         name: "{{ vmware_name }}"

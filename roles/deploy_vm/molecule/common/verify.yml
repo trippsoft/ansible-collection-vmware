@@ -6,9 +6,9 @@
   tasks:
     - name: Check VMware VM info
       community.vmware.vmware_guest_info:
-        hostname: "{{ vmware_hostname }}"
-        username: "{{ vmware_username }}"
-        password: "{{ vmware_password }}"
+        hostname: "{{ vmware_hostname | default(omit) }}"
+        username: "{{ vmware_username | default(omit) }}"
+        password: "{{ vmware_password | default(omit) }}"
         validate_certs: "{{ vmware_validate_certs | default(true) }}"
         datacenter: ha-datacenter
         name: "{{ vmware_name }}"

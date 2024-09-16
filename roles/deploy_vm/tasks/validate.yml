@@ -1,11 +1,48 @@
 ---
+- name: Validate VMware hostname is defined
+  when:
+    - lookup('env', 'VMWARE_HOST', default=Undefined) is not defined
+  ansible.builtin.assert:
+    that:
+      - vmware_hostname is defined
+    fail_msg: "The variable 'vmware_hostname' is not defined."
+    success_msg: "The variable 'vmware_hostname' is defined."
+
+- name: Validate VMware hostname is a valid FQDN or IPv4 address
+  when:
+    - vmware_hostname is defined
+  ansible.builtin.assert:
+    that:
+      - vmware_hostname is community.general.fqdn_valid or
+        vmware_hostname is ansible.utils.ipv4_address
+    fail_msg: "Hostname '{{ vmware_hostname }}' is not a valid FQDN or IPv4 address."
+    success_msg: "Hostname '{{ vmware_hostname }}' is a valid FQDN or IPv4 address."
+
+- name: Validate VMware username is defined
+  when:
+    - lookup('env', 'VMWARE_USER', default=Undefined) is not defined
+  ansible.builtin.assert:
+    that:
+      - vmware_username is defined
+    fail_msg: "The variable 'vmware_username' is not defined."
+    success_msg: "The variable 'vmware_username' is defined."
+
+- name: Validate VMware password is defined
+  when:
+    - lookup('env', 'VMWARE_PASSWORD', default=Undefined) is not defined
+  ansible.builtin.assert:
+    that:
+      - vmware_password is defined
+    fail_msg: "The variable 'vmware_password' is not defined."
+    success_msg: "The variable 'vmware_password' is defined."
+
 - name: Check if VMware template exists
   delegate_to: localhost
   community.vmware.vmware_guest_info:
-    hostname: "{{ vmware_hostname }}"
-    username: "{{ vmware_username }}"
-    password: "{{ vmware_password }}"
-    validate_certs: "{{ vmware_validate_certs }}"
+    hostname: "{{ vmware_hostname | default(omit) }}"
+    username: "{{ vmware_username | default(omit) }}"
+    password: "{{ vmware_password | default(omit) }}"
+    validate_certs: "{{ vmware_validate_certs | default(omit) }}"
     datacenter: "{{ vmware_datacenter }}"
     name: "{{ vmware_template }}"
   register: _vmware_template_info
@@ -21,10 +58,10 @@
 - name: Check if VMware datacenter exists
   delegate_to: localhost
   community.vmware.vmware_datacenter_info:
-    hostname: "{{ vmware_hostname }}"
-    username: "{{ vmware_username }}"
-    password: "{{ vmware_password }}"
-    validate_certs: "{{ vmware_validate_certs }}"
+    hostname: "{{ vmware_hostname | default(omit) }}"
+    username: "{{ vmware_username | default(omit) }}"
+    password: "{{ vmware_password | default(omit) }}"
+    validate_certs: "{{ vmware_validate_certs | default(omit) }}"
     datacenter: "{{ vmware_datacenter }}"
   register: _vmware_datacenter_info
   ignore_errors: true
@@ -61,10 +98,10 @@
     - name: Check if VMware host exists
       delegate_to: localhost
       community.vmware.vmware_host_facts:
-        hostname: "{{ vmware_hostname }}"
-        username: "{{ vmware_username }}"
-        password: "{{ vmware_password }}"
-        validate_certs: "{{ vmware_validate_certs }}"
+        hostname: "{{ vmware_hostname | default(omit) }}"
+        username: "{{ vmware_username | default(omit) }}"
+        password: "{{ vmware_password | default(omit) }}"
+        validate_certs: "{{ vmware_validate_certs | default(omit) }}"
         esxi_hostname: "{{ vmware_host }}"
       register: _vmware_host_info
       ignore_errors: true
@@ -84,10 +121,10 @@
     - name: Check if VMware cluster exists
       delegate_to: localhost
       community.vmware.vmware_cluster_info:
-        hostname: "{{ vmware_hostname }}"
-        username: "{{ vmware_username }}"
-        password: "{{ vmware_password }}"
-        validate_certs: "{{ vmware_validate_certs }}"
+        hostname: "{{ vmware_hostname | default(omit) }}"
+        username: "{{ vmware_username | default(omit) }}"
+        password: "{{ vmware_password | default(omit) }}"
+        validate_certs: "{{ vmware_validate_certs | default(omit) }}"
         datacenter: "{{ vmware_datacenter }}"
         cluster_name: "{{ vmware_cluster }}"
       register: _vmware_cluster_info
@@ -104,10 +141,10 @@
 - name: Check if VMware datastore exists
   delegate_to: localhost
   community.vmware.vmware_datastore_info:
-    hostname: "{{ vmware_hostname }}"
-    username: "{{ vmware_username }}"
-    password: "{{ vmware_password }}"
-    validate_certs: "{{ vmware_validate_certs }}"
+    hostname: "{{ vmware_hostname | default(omit) }}"
+    username: "{{ vmware_username | default(omit) }}"
+    password: "{{ vmware_password | default(omit) }}"
+    validate_certs: "{{ vmware_validate_certs | default(omit) }}"
     datacenter: "{{ vmware_datacenter }}"
     name: "{{ vmware_datastore }}"
   register: _vmware_datastore_info
@@ -285,10 +322,10 @@
     - name: Check if distributed vSwitch exists
       delegate_to: localhost
       community.vmware.vmware_dvswitch_info:
-        hostname: "{{ vmware_hostname }}"
-        username: "{{ vmware_username }}"
-        password: "{{ vmware_password }}"
-        validate_certs: "{{ vmware_validate_certs }}"
+        hostname: "{{ vmware_hostname | default(omit) }}"
+        username: "{{ vmware_username | default(omit) }}"
+        password: "{{ vmware_password | default(omit) }}"
+        validate_certs: "{{ vmware_validate_certs | default(omit) }}"
         switch_name: "{{ vmware_dv_switch_name }}"
       register: _vmware_dv_switch_info
       ignore_errors: true
@@ -304,10 +341,10 @@
     - name: Check if distributed port group exists
       delegate_to: localhost
       community.vmware.vmware_dvs_portgroup_info:
-        hostname: "{{ vmware_hostname }}"
-        username: "{{ vmware_username }}"
-        password: "{{ vmware_password }}"
-        validate_certs: "{{ vmware_validate_certs }}"
+        hostname: "{{ vmware_hostname | default(omit) }}"
+        username: "{{ vmware_username | default(omit) }}"
+        password: "{{ vmware_password | default(omit) }}"
+        validate_certs: "{{ vmware_validate_certs | default(omit) }}"
         datacenter: "{{ vmware_datacenter }}"
         dvswitch: "{{ vmware_dv_switch_name }}"
       register: _vmware_dv_portgroup_info
@@ -328,10 +365,10 @@
     - name: Check if standard port group exists
       delegate_to: localhost
       community.vmware.vmware_portgroup_info:
-        hostname: "{{ vmware_hostname }}"
-        username: "{{ vmware_username }}"
-        password: "{{ vmware_password }}"
-        validate_certs: "{{ vmware_validate_certs }}"
+        hostname: "{{ vmware_hostname | default(omit) }}"
+        username: "{{ vmware_username | default(omit) }}"
+        password: "{{ vmware_password | default(omit) }}"
+        validate_certs: "{{ vmware_validate_certs | default(omit) }}"
         cluster_name: "{{ vmware_cluster | default(omit) }}"
         esxi_hostname: "{{ vmware_host | default(omit) }}"
       register: _vmware_portgroup_info

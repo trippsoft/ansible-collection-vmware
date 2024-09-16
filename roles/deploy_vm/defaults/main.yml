@@ -1,6 +1,4 @@
 ---
-vmware_validate_certs: true
-
 vmware_allow_long_hostnames: false
 vmware_autologon_count: 1
 vmware_join_domain: false
