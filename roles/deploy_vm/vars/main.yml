@@ -38,6 +38,18 @@ _vmware_joindomain: >-
       and vmware_join_domain
       else omit }}
 
+_vmware_domainadmin: >-
+  {{ vmware_domain_username
+      if vmware_os_type == 'windows'
+      and vmware_join_domain
+      else omit }}
+
+_vmware_domainadminpassword: >-
+  {{ vmware_domain_password
+      if vmware_os_type == 'windows'
+      and vmware_join_domain
+      else omit }}
+
 _vmware_joinworkgroup: >-
   {{ vmware_workgroup
       if vmware_os_type == 'windows'

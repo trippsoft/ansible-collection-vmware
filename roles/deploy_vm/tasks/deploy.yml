@@ -41,6 +41,8 @@
       dns_servers: "{{ vmware_dns_servers | default(omit) }}"
       dns_suffix: "{{ vmware_dns_suffixes | default(omit) }}"
       domain: "{{ vmware_domain | default(omit) }}"
+      domainadmin: "{{ _vmware_domainadmin }}"
+      domainadminpassword: "{{ _vmware_domainadminpassword }}"
       fullname: "{{ _vmware_fullname }}"
       hostname: "{{ vmware_vm_hostname }}"
       hwclockUTC: "{{ _vmware_hwclockutc }}"

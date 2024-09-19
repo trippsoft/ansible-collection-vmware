@@ -1,7 +1,7 @@
 <!-- BEGIN_ANSIBLE_DOCS -->
 
 # Ansible Role: trippsc2.vmware.deploy_vm
-Version: 1.1.1
+Version: 1.1.2
 
 This role runs Bleachbit from a portable executable on Windows systems.
 

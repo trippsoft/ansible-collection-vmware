@@ -283,16 +283,16 @@
     - name: Validate domain join username is defined
       ansible.builtin.assert:
         that:
-          - vmware_join_username is defined
-        fail_msg: "The 'vmware_join_username' variable is required when joining a domain."
-        success_msg: "The 'vmware_join_username' variable is defined."
+          - vmware_domain_username is defined
+        fail_msg: "The 'vmware_domain_username' variable is required when joining a domain."
+        success_msg: "The 'vmware_domain_username' variable is defined."
 
     - name: Validate domain join password is defined
       ansible.builtin.assert:
         that:
-          - vmware_join_password is defined
-        fail_msg: "The 'vmware_join_password' variable is required when joining a domain."
-        success_msg: "The 'vmware_join_password' variable is defined."
+          - vmware_domain_password is defined
+        fail_msg: "The 'vmware_domain_password' variable is required when joining a domain."
+        success_msg: "The 'vmware_domain_password' variable is defined."
 
 - name: Validate CPU count
   ansible.builtin.assert:
