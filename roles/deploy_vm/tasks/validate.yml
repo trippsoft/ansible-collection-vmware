@@ -430,3 +430,12 @@
           - vmware_gateway is ansible.utils.ipv4_address
         fail_msg: "Gateway '{{ vmware_gateway }}' is not a valid IPv4 address."
         success_msg: "Gateway '{{ vmware_gateway }}' is a valid IPv4 address."
+
+- name: Validate MAC address
+  when:
+    - vmware_mac_address is defined
+  ansible.builtin.assert:
+    that:
+      - vmware_mac_address is match('^[0-9a-fA-F]{2}(:[0-9a-fA-F]{2}){5}$')
+    fail_msg: "MAC address '{{ vmware_mac_address }}' is not a valid MAC address."
+    success_msg: "MAC address '{{ vmware_mac_address }}' is a valid MAC address."

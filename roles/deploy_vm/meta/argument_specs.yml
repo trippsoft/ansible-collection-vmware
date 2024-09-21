@@ -306,3 +306,9 @@ argument_specs:
         description:
           - The type of network device to configure on the VM.
           - Unless you have a specific reason to change this, the default should be used.
+      vmware_mac_address:
+        type: str
+        required: false
+        description:
+          - The MAC address to configure on the VM.
+          - If not provided, a random MAC address is generated.

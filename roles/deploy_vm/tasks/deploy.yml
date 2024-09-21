@@ -69,6 +69,7 @@
         dvswitch_name: "{{ vmware_dv_switch_name | default(omit) }}"
         gateway: "{{ _vmware_gateway }}"
         ip: "{{ _vmware_ip }}"
+        mac: "{{ vmware_mac_address | default(omit) }}"
         name: "{{ vmware_network_name }}"
         netmask: "{{ _vmware_netmask }}"
         start_connected: true

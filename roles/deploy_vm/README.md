@@ -1,7 +1,7 @@
 <!-- BEGIN_ANSIBLE_DOCS -->
 
 # Ansible Role: trippsc2.vmware.deploy_vm
-Version: 1.1.2
+Version: 1.2.0
 
 This role runs Bleachbit from a portable executable on Windows systems.
 
@@ -61,6 +61,7 @@ This role runs Bleachbit from a portable executable on Windows systems.
 | vmware_netmask | <p>The netmask to configure on the VM.</p><p>If *vmware_network_type* is `static`, this is required.</p> | str | no |  |  |
 | vmware_gateway | <p>The gateway to configure on the VM.</p><p>If *vmware_network_type* is `static`, this is required.</p> | str | no |  |  |
 | vmware_network_device_type | <p>The type of network device to configure on the VM.</p><p>Unless you have a specific reason to change this, the default should be used.</p> | str | no | <ul><li>e1000</li><li>e1000e</li><li>vmxnet3</li></ul> | vmxnet3 |
+| vmware_mac_address | <p>The MAC address to configure on the VM.</p><p>If not provided, a random MAC address is generated.</p> | str | no |  |  |
 
 ### Options for vmware_custom_values
 |Option|Description|Type|Required|Choices|Default|
