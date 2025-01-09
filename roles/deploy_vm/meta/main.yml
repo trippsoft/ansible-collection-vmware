@@ -3,7 +3,7 @@ galaxy_info:
   author: Jim Tarpley
   namespace: trippsc2
   role_name: deploy_vm
-  description: This role runs Bleachbit from a portable executable on Windows systems.
+  description: This role deploys and customizes a new VMware VM from a template.
   license: MIT
 
   min_ansible_version: '2.15'
