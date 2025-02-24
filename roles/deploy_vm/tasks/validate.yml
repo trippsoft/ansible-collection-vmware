@@ -44,6 +44,7 @@
     password: "{{ vmware_password | default(omit) }}"
     validate_certs: "{{ vmware_validate_certs | default(omit) }}"
     datacenter: "{{ vmware_datacenter }}"
+    folder: "{{ _vmware_template_folder }}"
     name: "{{ vmware_template }}"
   register: _vmware_template_info
   ignore_errors: true

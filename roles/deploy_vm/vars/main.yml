@@ -11,6 +11,10 @@ _vmware_folder: >-
   {{ _vmware_datacenter_prefix | string + '/' + vmware_folder | string
       if vmware_folder is defined else _vmware_datacenter_prefix }}
 
+_vmware_template_folder: >-
+  {{ _vmware_datacenter_prefix | string + '/' + vmware_template_folder | string
+      if vmware_template_folder is defined else _vmware_datacenter_prefix }}
+
 _vmware_autologon: >-
   {{ vmware_autologon_count | int > 0
       if vmware_os_type == 'windows'

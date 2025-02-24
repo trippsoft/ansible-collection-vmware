@@ -1,7 +1,7 @@
 <!-- BEGIN_ANSIBLE_DOCS -->
 
 # Ansible Role: trippsc2.vmware.deploy_vm
-Version: 1.2.1
+Version: 1.3.0
 
 This role deploys and customizes a new VMware VM from a template.
 
@@ -22,6 +22,7 @@ This role deploys and customizes a new VMware VM from a template.
 | vmware_password | <p>The password for authenticating with the VMware infrastructure.</p> | str | no |  |  |
 | vmware_validate_certs | <p>Whether to validate SSL certificates.</p> | bool | no |  |  |
 | vmware_os_type | <p>The type of operating system installed on the VM to be deployed.</p><p>This value is used to determine which customization options are available.</p> | str | yes | <ul><li>linux</li><li>windows</li></ul> |  |
+| vmware_template_folder | <p>The name of the folder in which the template exists to deploy the VM.</p> | str | no |  |  |
 | vmware_template | <p>The name of the template from which to deploy the VM.</p> | str | yes |  |  |
 | vmware_custom_values | <p>A list of custom values to configure on the VM.</p> | list of dicts of 'vmware_custom_values' options | no |  |  |
 | vmware_name | <p>The name of the VM to be deployed.</p> | str | yes |  |  |
