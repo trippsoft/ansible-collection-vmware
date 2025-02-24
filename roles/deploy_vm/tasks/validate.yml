@@ -381,6 +381,7 @@
           - _vmware_portgroup_info.hosts_portgroup_info |
             dict2items |
             map(attribute='value') |
+            flatten |
             selectattr('portgroup', 'equalto', vmware_network_name) |
             list | count > 0
         fail_msg: "Standard port group '{{ vmware_network_name }}' does not exist."
