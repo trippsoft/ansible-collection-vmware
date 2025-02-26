@@ -4,7 +4,7 @@ argument_specs:
     short_description: Deploy VMware VM
     description:
       - This role deploys and customizes a new VMware VM from a template.
-    author: Jim Tarpley
+    author: Jim Tarpley (@trippsc2)
     options:
       vmware_hostname:
         type: str

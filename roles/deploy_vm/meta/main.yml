@@ -1,6 +1,6 @@
 ---
 galaxy_info:
-  author: Jim Tarpley
+  author: Jim Tarpley (@trippsc2)
   namespace: trippsc2
   role_name: deploy_vm
   description: This role deploys and customizes a new VMware VM from a template.
