@@ -4,7 +4,7 @@ name: vmware
 version: 1.3.1
 readme: README.md
 authors:
-  - Jim Tarpley
+  - Jim Tarpley (@trippsc2)
 description: This collection contains roles and modules for managing VMware infrastructure.
 
 license_file: 'LICENSE'
