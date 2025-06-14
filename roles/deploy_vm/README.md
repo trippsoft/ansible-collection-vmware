@@ -1,7 +1,7 @@
 <!-- BEGIN_ANSIBLE_DOCS -->
 
 # Ansible Role: trippsc2.vmware.deploy_vm
-Version: 1.3.1
+Version: 1.3.2
 
 This role deploys and customizes a new VMware VM from a template.
 
@@ -12,6 +12,8 @@ This role deploys and customizes a new VMware VM from a template.
 
 | Collection |
 | ---------- |
+| ansible.utils |
+| community.general |
 | community.vmware |
 
 ## Role Arguments
@@ -75,5 +77,5 @@ This role deploys and customizes a new VMware VM from a template.
 MIT
 
 ## Author and Project Information
-Jim Tarpley
+Jim Tarpley (@trippsc2)
 <!-- END_ANSIBLE_DOCS -->
