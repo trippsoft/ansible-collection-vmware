@@ -1,7 +1,7 @@
 ---
 namespace: trippsc2
 name: vmware
-version: 1.3.1
+version: 1.3.2
 readme: README.md
 authors:
   - Jim Tarpley (@trippsc2)
@@ -14,9 +14,11 @@ tags:
   - infrastructure
 
 dependencies:
+  ansible.utils: '>=2.5.0'
+  community.general: '>=8.1.0'
   community.vmware: '>=1.0.0'
 
-repository: https://github.com/trippsc2/ansible-collection-vmware.git
+repository: https://github.com/trippsoft/ansible-collection-vmware.git
 
 manifest:
   directives:

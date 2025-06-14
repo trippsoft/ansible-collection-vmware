@@ -1,0 +1,25 @@
+---
+name: Generate Role Docs
+'on':
+  workflow_dispatch: {}
+  push:
+    branches:
+      - main
+    paths:
+      - galaxy.yml
+      - roles/deploy_vm/.aar_doc.yml
+      - roles/deploy_vm/README.md
+      - roles/deploy_vm/meta/argument_specs.yml
+      - roles/deploy_vm/meta/main.yml
+defaults:
+  run:
+    working-directory: 'trippsc2.vmware'
+jobs:
+  docs_deploy_vm:
+    name: Generate deploy_vm role documentation
+    permissions:
+      contents: write
+    uses: trippsoft/github-actions/.github/workflows/role-docs.yml@main
+    with:
+      working_directory: 'trippsc2.vmware'
+      role_name: 'deploy_vm'

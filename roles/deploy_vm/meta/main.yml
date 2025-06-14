@@ -11,6 +11,8 @@ galaxy_info:
   platforms: []
 
 collections:
+  - ansible.utils
+  - community.general
   - community.vmware
 
 dependencies: []
