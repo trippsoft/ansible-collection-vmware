@@ -14,7 +14,7 @@
         name: "{{ vmware_name }}"
       register: _vmware_vm_info
       ignore_errors: true
-    
+
     - name: Verify VMware VM exists
       ansible.builtin.assert:
         that:
